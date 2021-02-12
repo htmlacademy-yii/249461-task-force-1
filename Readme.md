@@ -1,7 +1,7 @@
 # Личный проект «TaskForce»
 
 * Студент: [Сергей Кравцов](https://up.htmlacademy.ru/yii/1/user/249461).
-* Наставник: [Никита Медведев](https://htmlacademy.ru/profile/id1281715).
+* Наставник: [Никита Зарубин](https://htmlacademy.ru/profile/id1385885).
 
 ---
 
