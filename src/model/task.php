@@ -1,5 +1,7 @@
 <?php
 
+namespace taskForce\model;
+
 /**
  * Class Task - возвращает статусы и доступные действия
  */

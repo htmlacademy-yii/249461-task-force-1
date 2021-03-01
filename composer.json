@@ -1,0 +1,19 @@
+{
+  "name": "task-force",
+  "description": "онлайн площадка для поиска исполнителей на разовые задачи",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "skrav",
+      "email": "email@example.com"
+    }
+  ],
+  "require": {
+  },
+  "autoload": {
+    "psr-4": {
+      "taskForce\\": "src/"
+    }
+  }
+}
