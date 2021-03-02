@@ -4,8 +4,6 @@ use taskForce\model\task;
 
 require_once 'vendor/autoload.php';
 
-
-
 $newTask = new Task(111,222);
 
 assert($newTask->getNextStatus('cancel') === Task::STATUS_CANCELED, 'cancel action');
