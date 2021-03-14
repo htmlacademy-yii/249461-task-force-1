@@ -15,3 +15,14 @@ assert($newTask->getAvailableAction('new', 111) === Task::ACTION_RESPOND, 'progr
 assert($newTask->getAvailableAction('progress', 111) === Task::ACTION_REFUSE, 'refuse status');
 assert($newTask->getAvailableAction('new', 222) === Task::ACTION_CANCEL, 'respond status');
 assert($newTask->getAvailableAction('progress', 222) === Task::ACTION_PERFOMED, 'perfomed status');
+
+
+
+/*
+class User {};          -> регистрация пользователя
+class CreateTask {};    -> создание нового таска
+class Message {};       -> отправка сообщения между заказчиком и исполнителем
+class Review {};        -> завершение задачи, оценка исполнителю и отзыв о его работе
+class Response {};      -> отклик на задачу
+class Notification {};  -> отправка уведомлений
+*/
