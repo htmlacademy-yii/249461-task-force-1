@@ -2,6 +2,11 @@
 
 namespace taskForce\model;
 
+use taskForce\model\actions\CanceledAction;
+use taskForce\model\actions\PerfomedAction;
+use taskForce\model\actions\RefuseAction;
+use taskForce\model\actions\RespondAction;
+
 /**
  * Class Task - возвращает статусы и доступные действия
  */
@@ -31,7 +36,7 @@ class Task {
     private $idClient;
 
     /**
-    * Возвращает id исполнителя
+     * Возвращает id исполнителя
      */
     public function getIdExecutor() {
         return $this->idExecutor;
@@ -45,7 +50,7 @@ class Task {
     }
 
     /**
-    * Конструктор принимает id заказчика и исполнителя
+     * Конструктор принимает id заказчика и исполнителя
      * @param int $idExecutor
      * @param int $idClient
      */
@@ -92,23 +97,33 @@ class Task {
         }
     }
 
+    public $availableActions = [];
+
     public function getAvailableAction($currentStatus, $id) {
-        if ($id === self::getIdExecutor()) {
-            switch ($currentStatus) {
-                case self::STATUS_NEW:
-                    return self::ACTION_RESPOND;
-                case self::STATUS_PROGRESS:
-                    return self::ACTION_REFUSE;
-            }
-        } elseif ($id === self::getIdClient()) {
-            switch ($currentStatus) {
-                case self::STATUS_NEW:
-                    return self::ACTION_CANCEL;
-                case self::STATUS_PROGRESS:
-                    return self::ACTION_PERFOMED;
-            }
-        } else {
-            return print('Действие или пользователь не определены');
+        switch ($currentStatus) {
+            case self::STATUS_NEW:
+                $action = new RespondAction();
+                if ($action->userRoleCheck($this->idClient, $this->idExecutor, $id)) {
+                    return $action;
+                }
+                unset($action);
+
+                $action = new CanceledAction();
+                if ($action->userRoleCheck($this->idClient, $this->idExecutor, $id)) {
+                    return $action;
+                }
+
+            case self::STATUS_PROGRESS:
+                $action = new RefuseAction();
+                if ($action->userRoleCheck($this->idClient, $this->idExecutor, $id)) {
+                    return $action;
+                }
+                unset($action);
+
+                $action = new PerfomedAction();
+                if ($action->userRoleCheck($this->idClient, $this->idExecutor, $id)) {
+                    return $action;
+                };
         }
     }
 }
