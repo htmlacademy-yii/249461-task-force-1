@@ -29,7 +29,6 @@ class Task {
     const ACTION_RESPOND = 'respond';       // откликнутся
     const ACTION_REFUSE = 'refuse';         // отказаться
 
-
     public $currentStatus = self::STATUS_NEW;
 
     private $idExecutor;
@@ -97,33 +96,29 @@ class Task {
         }
     }
 
-    public $availableActions = [];
-
     public function getAvailableAction($currentStatus, $id) {
+        $availableClasses = [];
+        
         switch ($currentStatus) {
             case self::STATUS_NEW:
-                $action = new RespondAction();
-                if ($action->userRoleCheck($this->idClient, $this->idExecutor, $id)) {
-                    return $action;
-                }
-                unset($action);
-
-                $action = new CanceledAction();
-                if ($action->userRoleCheck($this->idClient, $this->idExecutor, $id)) {
-                    return $action;
-                }
-
+                $availableClasses[] = RespondAction::class;
+                $availableClasses[] = CanceledAction::class;
+                break;
             case self::STATUS_PROGRESS:
-                $action = new RefuseAction();
-                if ($action->userRoleCheck($this->idClient, $this->idExecutor, $id)) {
-                    return $action;
-                }
-                unset($action);
-
-                $action = new PerfomedAction();
-                if ($action->userRoleCheck($this->idClient, $this->idExecutor, $id)) {
-                    return $action;
-                };
+                $availableClasses[] = RefuseAction::class;
+                $availableClasses[] = PerfomedAction::class;
+                break;
         }
+
+        $availableActions = [];
+
+        foreach ($availableClasses as $class) {
+            $model = new $class();
+            if ($model->userRoleCheck($this->idClient, $this->idExecutor, $id)) {
+                $availableActions = $model;
+            }
+        }
+
+        return $availableActions;
     }
 }

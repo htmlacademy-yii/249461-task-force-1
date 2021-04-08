@@ -17,7 +17,6 @@ assert(($newTask->getAvailableAction('new', 222))->getActionSystemName() === 'ca
 assert(($newTask->getAvailableAction('progress', 222))->getActionSystemName() === 'perfomed', 'perfomed status');
 
 
-
 /*
 class User {};          -> регистрация пользователя
 class CreateTask {};    -> создание нового таска
