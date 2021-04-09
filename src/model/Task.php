@@ -98,7 +98,7 @@ class Task {
 
     public function getAvailableAction($currentStatus, $id) {
         $availableClasses = [];
-        
+
         switch ($currentStatus) {
             case self::STATUS_NEW:
                 $availableClasses[] = RespondAction::class;
@@ -110,7 +110,7 @@ class Task {
                 break;
         }
 
-        $availableActions = [];
+        $availableActions = null;
 
         foreach ($availableClasses as $class) {
             $model = new $class();
