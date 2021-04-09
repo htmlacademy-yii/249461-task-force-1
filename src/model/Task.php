@@ -2,6 +2,11 @@
 
 namespace taskForce\model;
 
+use taskForce\model\actions\CanceledAction;
+use taskForce\model\actions\PerfomedAction;
+use taskForce\model\actions\RefuseAction;
+use taskForce\model\actions\RespondAction;
+
 /**
  * Class Task - возвращает статусы и доступные действия
  */
@@ -24,14 +29,13 @@ class Task {
     const ACTION_RESPOND = 'respond';       // откликнутся
     const ACTION_REFUSE = 'refuse';         // отказаться
 
-
     public $currentStatus = self::STATUS_NEW;
 
     private $idExecutor;
     private $idClient;
 
     /**
-    * Возвращает id исполнителя
+     * Возвращает id исполнителя
      */
     public function getIdExecutor() {
         return $this->idExecutor;
@@ -45,7 +49,7 @@ class Task {
     }
 
     /**
-    * Конструктор принимает id заказчика и исполнителя
+     * Конструктор принимает id заказчика и исполнителя
      * @param int $idExecutor
      * @param int $idClient
      */
@@ -93,22 +97,28 @@ class Task {
     }
 
     public function getAvailableAction($currentStatus, $id) {
-        if ($id === self::getIdExecutor()) {
-            switch ($currentStatus) {
-                case self::STATUS_NEW:
-                    return self::ACTION_RESPOND;
-                case self::STATUS_PROGRESS:
-                    return self::ACTION_REFUSE;
-            }
-        } elseif ($id === self::getIdClient()) {
-            switch ($currentStatus) {
-                case self::STATUS_NEW:
-                    return self::ACTION_CANCEL;
-                case self::STATUS_PROGRESS:
-                    return self::ACTION_PERFOMED;
-            }
-        } else {
-            return print('Действие или пользователь не определены');
+        $availableClasses = [];
+
+        switch ($currentStatus) {
+            case self::STATUS_NEW:
+                $availableClasses[] = RespondAction::class;
+                $availableClasses[] = CanceledAction::class;
+                break;
+            case self::STATUS_PROGRESS:
+                $availableClasses[] = RefuseAction::class;
+                $availableClasses[] = PerfomedAction::class;
+                break;
         }
+
+        $availableActions = null;
+
+        foreach ($availableClasses as $class) {
+            $model = new $class();
+            if ($model->userRoleCheck($this->idClient, $this->idExecutor, $id)) {
+                $availableActions = $model;
+            }
+        }
+
+        return $availableActions;
     }
 }

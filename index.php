@@ -11,11 +11,10 @@ assert($newTask->getNextStatus('perfomed') === Task::STATUS_COMPLETED, 'perfomed
 assert($newTask->getNextStatus('respond') === Task::STATUS_PROGRESS, 'respond action');
 assert($newTask->getNextStatus('refuse') === Task::STATUS_FAILED, 'refuse action');
 
-assert($newTask->getAvailableAction('new', 111) === Task::ACTION_RESPOND, 'progress status');
-assert($newTask->getAvailableAction('progress', 111) === Task::ACTION_REFUSE, 'refuse status');
-assert($newTask->getAvailableAction('new', 222) === Task::ACTION_CANCEL, 'respond status');
-assert($newTask->getAvailableAction('progress', 222) === Task::ACTION_PERFOMED, 'perfomed status');
-
+assert(($newTask->getAvailableAction('new', 111)->getActionSystemName()) === 'respond', 'progress status');
+assert(($newTask->getAvailableAction('progress', 111)->getActionSystemName()) === 'refuse', 'refuse status');
+assert(($newTask->getAvailableAction('new', 222)->getActionSystemName()) === 'cancel', 'respond status');
+assert(($newTask->getAvailableAction('progress', 222)->getActionSystemName()) === 'perfomed', 'perfomed status');
 
 
 /*
