@@ -7,6 +7,7 @@ use taskForce\model\actions\PerfomedAction;
 use taskForce\model\actions\RefuseAction;
 use taskForce\model\actions\RespondAction;
 
+use taskForce\exeptions\CheckTaskExeptions;
 /**
  * Class Task - возвращает статусы и доступные действия
  */
@@ -37,14 +38,14 @@ class Task {
     /**
      * Возвращает id исполнителя
      */
-    public function getIdExecutor() {
+    public function getIdExecutor(): int {
         return $this->idExecutor;
     }
 
     /**
      * Возвращает id заказчика
      */
-    public function getIdClient() {
+    public function getIdClient(): int {
         return $this->idClient;
     }
 
@@ -53,7 +54,7 @@ class Task {
      * @param int $idExecutor
      * @param int $idClient
      */
-    public function __construct($idExecutor, $idClient) {
+    public function __construct(int $idExecutor, int $idClient) {
         $this->idExecutor = $idExecutor;
         $this->idClient = $idClient;
     }
@@ -73,15 +74,15 @@ class Task {
         self::ACTION_REFUSE => 'Отказаться',
     ];
 
-    public function getMapStatus() {
+    public function getMapStatus(): array {
         return $this->mapStatus;
     }
 
-    public function getMapAction($action) {
-        return $this->mapAction[$action];
+    public function getMapAction(): array {
+        return $this->mapAction;
     }
 
-    public function getNextStatus($action) {
+    public function getNextStatus(string $action): string {
         switch ($action) {
             case self::ACTION_CANCEL:
                 return self::STATUS_CANCELED;
@@ -92,11 +93,20 @@ class Task {
             case self::ACTION_REFUSE:
                 return self::STATUS_FAILED;
             default:
-                return $this->currentStatus;
+                throw new CheckTaskExeptions("Действие не определено");
         }
     }
 
-    public function getAvailableAction($currentStatus, $id) {
+    public function getAvailableAction(string $currentStatus, int $id) {
+
+        if ($currentStatus != self::STATUS_NEW && $currentStatus != self::STATUS_PROGRESS) {
+            throw new CheckTaskExeptions("Нет доступных действий для указаного статуса");
+        }
+
+        if ($id != $this->idClient && $id != $this->idExecutor) {
+            throw new CheckTaskExeptions("Исполнитель или заказчик не определён");
+        }
+
         $availableClasses = [];
 
         switch ($currentStatus) {

@@ -10,7 +10,7 @@ class RespondAction extends AbstractAction
     /**
      * Возвращает название действия
      */
-    function getActionName()
+    function getActionName(): string
     {
         return "Откликнуться";
     }
@@ -18,7 +18,7 @@ class RespondAction extends AbstractAction
     /**
      * Возвращает системное название действия
      */
-    function getActionSystemName()
+    function getActionSystemName(): string
     {
         return "respond";
     }
@@ -26,7 +26,7 @@ class RespondAction extends AbstractAction
     /**
      * Проверяет права пользователя для этого действия
      */
-    function userRoleCheck($clientId, $executorId, $currentUser)
+    function userRoleCheck(int $clientId, int $executorId, int $currentUser): bool
     {
         if ($currentUser === $executorId) {
             return true;

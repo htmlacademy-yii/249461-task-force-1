@@ -17,5 +17,5 @@ abstract class AbstractAction {
     /**
      * Проверяет права пользователя для текущего действия
      */
-    abstract function userRoleCheck($clientId, $executorId, $currentUser);
+    abstract function userRoleCheck(int $clientId, int $executorId, int $currentUser);
 }
